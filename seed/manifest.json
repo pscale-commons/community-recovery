@@ -1,0 +1,57 @@
+[
+ {
+  "block": "lighthouse",
+  "file": "lighthouse.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "spine:constitution",
+  "file": "spine-constitution.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "function:constitution",
+  "file": "function-constitution.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "pool:constitution",
+  "file": "pool-constitution.json",
+  "latch": "open"
+ },
+ {
+  "block": "spine:agreement",
+  "file": "spine-agreement.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "function:agreement",
+  "file": "function-agreement.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "pool:agreement",
+  "file": "pool-agreement.json",
+  "latch": "open"
+ },
+ {
+  "block": "spine:standards",
+  "file": "spine-standards.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "function:standards",
+  "file": "function-standards.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "pool:standards",
+  "file": "pool-standards.json",
+  "latch": "open"
+ },
+ {
+  "block": "pool:community-recovery",
+  "file": "pool-community-recovery.json",
+  "latch": "open"
+ }
+]

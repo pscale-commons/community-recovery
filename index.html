@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Recovery</title>
+<meta name="description" content="Community Recovery's place on the beach: read, answer and shape what the community holds in common, each in your own words.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151a19" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%233f6f66'/%3E%3Cpath d='M16 25V14' stroke='%23f7f5f0' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M16 17c0-5 3-8 8-8 0 5-3 8-8 8zM16 20c0-4-2.5-6.5-6.5-6.5 0 4 2.5 6.5 6.5 6.5z' fill='%23f7f5f0'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="look.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="./"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#3f6f66"/><path d="M16 25V14" stroke="#f7f5f0" stroke-width="2.4" stroke-linecap="round"/><path d="M16 17c0-5 3-8 8-8 0 5-3 8-8 8zM16 20c0-4-2.5-6.5-6.5-6.5 0 4 2.5 6.5 6.5 6.5z" fill="#f7f5f0"/></svg>Community Recovery</a>
+    <nav class="section-nav" aria-label="Community Recovery">
+      <a href="join.html">Join us</a>
+      <a href="constitution.html">Constitution</a>
+      <a href="standards.html">Standards</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Community Recovery</h1>
+  <a class="pill" href="made.html">Made on the beach, for Community Recovery to use</a>
+  <p class="lead how" id="strap">A lived experience recovery organisation in North Northamptonshire.</p>
+
+  <ul class="doors" id="doors"></ul>
+
+  <section id="here" hidden>
+    <h2>Who&rsquo;s here</h2>
+    <ul class="people" id="people"></ul>
+  </section>
+
+  <section id="room">
+    <h2>Leave a note</h2>
+    <div class="thread" id="thread"></div>
+    <form id="note-form" novalidate>
+      <p class="form-foot">Notes are public and they stay. Please don&rsquo;t include anything personal about anyone&rsquo;s recovery, your own or anyone else&rsquo;s.</p>
+      <label for="who">Your name (optional)</label>
+      <input id="who" name="who" type="text" maxlength="40" autocomplete="off">
+      <label class="trap" for="web" aria-hidden="true">Leave this empty</label>
+      <input class="trap" id="web" name="web" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label for="note">Your note</label>
+      <textarea id="note" name="note" maxlength="1500" required></textarea>
+      <button type="submit">Leave a note</button>
+      <p class="form-status" role="status"></p>
+    </form>
+  </section>
+
+  <p class="me" id="me"></p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Community Recovery is a peer-led recovery community. It is not an emergency service, crisis service or substitute for medical, mental health, legal or other professional advice. If urgent help is needed, contact the appropriate emergency or crisis service.</p>
+    <p id="honest">This place was made on the beach for Community Recovery to use. It does not speak for Community Recovery. It becomes theirs as its members use it, and it is removed if they ask.</p>
+    <p><a href="made.html">How this place was made</a></p>
+  </div>
+</footer>
+<script src="config.js"></script>
+<script src="words.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var el = Kit.el, $ = function (id) { return document.getElementById(id); }, CFG = Kit.config;
+
+  // The front door is the lighthouse, drawn: change the block and this page changes.
+  Kit.read('lighthouse').then(function (lh) {
+    if (!lh) return;
+    var root = Kit.split(Kit.text(lh)).gloss, stop = root.indexOf('. ');
+    if (root) $('strap').textContent = Kit.cap(stop > 0 ? root.slice(0, stop + 1) : root);
+    var tail = root.indexOf('This place was made');
+    if (tail >= 0) $('honest').textContent = root.slice(tail);
+    var doors = $('doors'); doors.textContent = '';
+    Kit.digits(lh).forEach(function (k) {
+      if (typeof lh[k] !== 'string') return;
+      var sp = Kit.split(lh[k]), colon = sp.gloss.indexOf(': ');
+      var href = (CFG.pages || {})[sp.title] || (/^https?:\/\//.test(sp.title) ? sp.title : null);
+      if (!href || !sp.gloss) return;
+      var li = el('li'), a = el('a'); a.href = href;
+      a.appendChild(el('strong', null, colon > 0 ? sp.gloss.slice(0, colon) : sp.gloss));
+      if (colon > 0) a.appendChild(el('span', null, Kit.cap(sp.gloss.slice(colon + 2))));
+      li.appendChild(a); doors.appendChild(li);
+    });
+  }, function () {});
+
+  // Who is here: read from people's own cards, never kept as a list.
+  Kit.index().then(function (idx) {
+    var born = (idx && idx.born) || {}, all = Kit.names(idx);
+    var who = Kit.people(idx).sort(function (a, b) { return String(born['passport:' + a] || '').localeCompare(String(born['passport:' + b] || '')); });
+    if (!who.length) return;
+    return Promise.all(who.map(function (n) {
+      return Promise.all([
+        Kit.read('passport:' + n).catch(function () { return null; }),
+        all.indexOf('agreement:' + n) >= 0 ? Kit.read('agreement:' + n).catch(function () { return null; }) : Promise.resolve(null)
+      ]).then(function (r) { return { name: n, card: r[0], agreed: r[1] }; });
+    })).then(function (list) {
+      var ul = $('people'); ul.textContent = '';
+      list.forEach(function (p) {
+        if (!p.card) return;
+        var li = el('li'); li.appendChild(el('strong', null, p.name));
+        var a = p.agreed, yes = a && ['1', '2'].every(function (k) { return /^Agreed\b/.test(Kit.text(Kit.at(a, k))); });
+        if (yes) li.appendChild(el('span', 'agreed', '\u2713 agreed'));
+        var line = Kit.text(p.card);
+        if (line && line !== p.name) li.appendChild(el('span', 'line', line));
+        if (typeof p.card['1'] === 'string' && p.card['1'].trim()) li.appendChild(el('span', 'line', 'Brings: ' + p.card['1']));
+        ul.appendChild(li);
+      });
+      $('here').hidden = !ul.childNodes.length;
+    });
+  }, function () {});
+
+  // The room: notes, oldest first. As a room grows the beach nests the older notes under "_".
+  function entries(node, out) {
+    out = out || [];
+    if (!node || typeof node !== 'object') return out;
+    if (node._ && typeof node._ === 'object') entries(node._, out);
+    Kit.digits(node).forEach(function (k) {
+      var e = node[k];
+      if (e && typeof e === 'object' && typeof e._ === 'string' && typeof e['3'] === 'string') { if (e._.trim()) out.push({ who: typeof e['1'] === 'string' ? e['1'] : '', when: e['3'], text: e._ }); }
+      else if (e && typeof e === 'object') entries(e, out);
+    });
+    return out;
+  }
+  function thread() {
+    return Kit.read('pool:community-recovery').then(function (pool) {
+      var box = $('thread'); box.textContent = '';
+      entries(pool).forEach(function (c) {
+        var d = el('div', 'comment'), meta = el('p', 'comment-meta');
+        if (c.who) meta.appendChild(el('strong', null, c.who));
+        meta.appendChild(document.createTextNode((c.who ? ' \u00b7 ' : '') + Kit.when(c.when)));
+        d.appendChild(meta); d.appendChild(el('p', 'comment-text', c.text)); box.appendChild(d);
+      });
+    }, function () {});
+  }
+  thread();
+  var form = $('note-form'), status = form.querySelector('.form-status'), button = form.querySelector('button');
+  var m = Kit.me(); if (m) form.who.value = m.name;
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var note = form.note.value.trim();
+    if (form.web.value || !note) return;
+    // a typed name is shown as a visitor's, so nobody can sign a note as someone else
+    var typed = form.who.value.replace(/\s+/g, ' ').trim().slice(0, 40);
+    button.disabled = true; status.textContent = 'Sending\u2026';
+    Kit.post({ block: 'pool:community-recovery', append: true, content: { _: note, 1: typed ? typed + ', a visitor' : 'a visitor', 2: '', 3: new Date().toISOString() } }).then(function (r) {
+      button.disabled = false;
+      if (!r.ok) { status.textContent = 'That didn\u2019t reach the beach. Please try again in a moment.'; return; }
+      form.note.value = ''; status.textContent = 'Thank you. Your note is here.';
+      return thread();
+    });
+  });
+
+  Kit.whoLine($('me'));
+})();
+</script>
+</body>
+</html>

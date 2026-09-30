@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join us · Community Recovery</title>
+<meta name="description" content="Join Community Recovery's place on the beach: choose a name, read the community agreement, and agree to it in your own time.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151a19" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%233f6f66'/%3E%3Cpath d='M16 25V14' stroke='%23f7f5f0' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M16 17c0-5 3-8 8-8 0 5-3 8-8 8zM16 20c0-4-2.5-6.5-6.5-6.5 0 4 2.5 6.5 6.5 6.5z' fill='%23f7f5f0'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="look.css">
+<link rel="stylesheet" href="kit.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="./"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#3f6f66"/><path d="M16 25V14" stroke="#f7f5f0" stroke-width="2.4" stroke-linecap="round"/><path d="M16 17c0-5 3-8 8-8 0 5-3 8-8 8zM16 20c0-4-2.5-6.5-6.5-6.5 0 4 2.5 6.5 6.5 6.5z" fill="#f7f5f0"/></svg>Community Recovery</a>
+    <nav class="section-nav" aria-label="Community Recovery">
+      <a href="join.html" aria-current="page">Join us</a>
+      <a href="constitution.html">Constitution</a>
+      <a href="standards.html">Standards</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Join us</h1>
+  <p class="how">Choose a name. Read our agreement. Say yes in your own time.</p>
+  <div id="status" aria-live="polite"><p class="calm">Opening&hellip;</p></div>
+
+  <section class="card-box" id="hello" hidden>
+    <h2>Hello</h2>
+    <div id="hello-body"></div>
+  </section>
+
+  <div id="notes"></div>
+  <div id="parts"></div>
+
+  <section class="card-box about" id="about" hidden>
+    <h2>About you, if you like</h2>
+    <p class="small">Everyone can read this. Leave any of it empty.</p>
+    <form id="about-form" novalidate>
+      <label for="line">A line about you</label>
+      <input id="line" type="text" maxlength="160" autocomplete="off">
+      <label for="bring">Strengths, skills, interests or experiences I may like to bring</label>
+      <textarea id="bring" maxlength="600"></textarea>
+      <label for="hope">Something I hope will be different or stronger through taking part</label>
+      <textarea id="hope" maxlength="600"></textarea>
+      <div class="btns"><button type="submit" class="ans on">Save</button></div>
+      <p class="form-status" id="about-status" role="status"></p>
+    </form>
+  </section>
+
+  <section class="card-box" id="in" hidden>
+    <h2>You&rsquo;re in</h2>
+    <div id="paper"></div>
+    <a class="go" href="constitution.html">Read our constitution</a>
+  </section>
+
+  <p class="me" id="me"></p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>What you write here is public, under the name you chose. You can change it or remove it at any time.</p>
+    <p>Made on the beach for Community Recovery to use. It becomes theirs as its members use it. <a href="made.html">How this place was made</a>.</p>
+  </div>
+</footer>
+<script src="config.js"></script>
+<script src="words.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var el = Kit.el, $ = function (id) { return document.getElementById(id); };
+  var FAM = 'agreement', spine = null, mine = null, wording = '';
+
+  function numbered(n) { return n && typeof n === 'object' && /^\d+\.\s/.test(Kit.text(n)); }
+  function agreedAt(k) {
+    var t = mine ? Kit.text(Kit.at(mine, k)) : '';
+    var m = /^Agreed\b/.test(t) && t.match(/(\d{4}-\d{2}-\d{2})/);
+    return /^Agreed\b/.test(t) ? (m ? m[1] : true) : null;
+  }
+  function lines(box, n) {                 // a part's own lines, its small headings above them
+    var ul = el('ul');
+    Kit.digits(n).forEach(function (k) {
+      var c = n[k];
+      if (typeof c === 'string') ul.appendChild(el('li', null, c));
+      else { if (ul.childNodes.length) { box.appendChild(ul); ul = el('ul'); } box.appendChild(el('p', 'theme-title', Kit.split(Kit.text(c)).title)); lines(box, c); }
+    });
+    if (ul.childNodes.length) box.appendChild(ul);
+  }
+
+  function hello() {
+    var box = $('hello-body'), m = Kit.me(); box.textContent = '';
+    if (m) {
+      var p = el('p'); p.appendChild(document.createTextNode('You\u2019re ')); p.appendChild(el('strong', null, m.name)); p.appendChild(document.createTextNode('.'));
+      box.appendChild(p);
+    } else {
+      var b = el('button', 'go', 'Choose a name'); b.type = 'button';
+      b.addEventListener('click', function () { Kit.nameSheet().then(refresh, function () {}); });
+      box.appendChild(b);
+    }
+    $('hello').hidden = false;
+  }
+
+  function parts() {
+    var notes = $('notes'), box = $('parts'); notes.textContent = ''; box.textContent = '';
+    Kit.digits(spine).forEach(function (k) {
+      var n = spine[k];
+      if (typeof n === 'string') return;                        // the closing line: shown under You're in
+      var sp = Kit.split(Kit.text(n));
+      if (!numbered(n)) {                                        // read first
+        var note = el('section', 'card-box');
+        note.appendChild(el('h2', null, sp.title));
+        Kit.digits(n).forEach(function (j) {
+          var t = Kit.text(n[j]), nl = t.indexOf('\n'), p = el('p');
+          if (nl > 0) { p.appendChild(el('strong', null, t.slice(0, nl) + ' ')); p.appendChild(document.createTextNode(t.slice(nl + 1))); } else p.textContent = t;
+          note.appendChild(p);
+        });
+        notes.appendChild(note);
+        return;
+      }
+      var card = el('section', 'card-box'); card.id = 'part-' + k;
+      card.appendChild(el('h2', null, sp.title));
+      if (sp.gloss) card.appendChild(el('p', null, Kit.cap(sp.gloss)));
+      lines(card, n);
+      var foot = el('div'); card.appendChild(foot);
+      (function draw() {
+        foot.textContent = '';
+        var on = agreedAt(k);
+        if (on) {
+          var p = el('p', 'done', '\u2713 Agreed' + (on === true ? '' : ' on ' + Kit.when(on)));
+          foot.appendChild(p);
+          var w = el('button', 'plain', 'Withdraw'); w.type = 'button';
+          w.addEventListener('click', function () { write(k, '').then(function (ok) { if (ok) { set(k, ''); draw(); finish(); } }); });
+          foot.appendChild(w);
+        } else {
+          var b = el('button', 'go', 'I agree'); b.type = 'button';
+          var s = el('p', 'form-status'); s.setAttribute('role', 'status');
+          b.addEventListener('click', function () {
+            Kit.name().then(function () {
+              hello(); about();
+              b.disabled = true;
+              var t = 'Agreed. ' + Kit.today() + (wording ? ', the ' + wording + ' wording.' : '.');
+              write(k, t).then(function (ok) {
+                b.disabled = false;
+                if (!ok) { s.textContent = 'That didn\u2019t reach the beach. Please try again in a moment.'; return; }
+                set(k, t); draw(); finish();
+              });
+            }, function () {});
+          });
+          foot.appendChild(b); foot.appendChild(s);
+        }
+      })();
+      box.appendChild(card);
+    });
+  }
+  function set(k, t) { mine = mine && typeof mine === 'object' ? mine : {}; var cur = mine[k]; if (cur && typeof cur === 'object') cur._ = t; else mine[k] = t; }
+  function write(k, t) {
+    var m = Kit.me();
+    return Kit.ready(m).then(function () {
+      return Kit.post({ block: FAM + ':' + m.name, spindle: k, content: t, secret: m.words });
+    }).then(function (r) { return r.ok; });
+  }
+
+  function about() {
+    var m = Kit.me(); $('about').hidden = !m;
+    if (!m || about.loaded === m.name) return;
+    about.loaded = m.name;
+    Kit.read('passport:' + m.name).then(function (p) {
+      if (!p) return;
+      var line = Kit.text(p);
+      $('line').value = line === m.name ? '' : line;
+      $('bring').value = typeof p['1'] === 'string' ? p['1'] : '';
+      $('hope').value = typeof p['2'] === 'string' ? p['2'] : '';
+    }, function () {});
+  }
+  $('about-form').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var m = Kit.me(); if (!m) return;
+    var st = $('about-status'); st.textContent = 'Saving\u2026';
+    var block = 'passport:' + m.name;
+    Promise.all([
+      Kit.post({ block: block, spindle: '0', content: $('line').value.trim() || m.name, secret: m.words }),
+      Kit.post({ block: block, spindle: '1', content: $('bring').value.trim(), secret: m.words }),
+      Kit.post({ block: block, spindle: '2', content: $('hope').value.trim(), secret: m.words })
+    ]).then(function (rs) {
+      st.textContent = rs.every(function (r) { return r.ok; }) ? 'Saved.' : 'That didn\u2019t reach the beach. Please try again in a moment.';
+    });
+  });
+
+  function finish() {
+    var all = Kit.digits(spine).filter(function (k) { return numbered(spine[k]); });
+    var inn = all.length && all.every(function (k) { return agreedAt(k); });
+    $('in').hidden = !inn;
+    var paper = $('paper'); paper.textContent = '';
+    Kit.digits(spine).forEach(function (k) {
+      if (typeof spine[k] !== 'string') return;
+      var t = spine[k], nl = t.indexOf('\n');
+      if (nl > 0) { paper.appendChild(el('p', 'label', t.slice(0, nl))); paper.appendChild(el('p', null, t.slice(nl + 1))); } else paper.appendChild(el('p', null, t));
+    });
+  }
+
+  function refresh() {
+    var m = Kit.me();
+    var job = m ? Kit.read(FAM + ':' + m.name).then(function (b) { mine = b; }, function () { mine = null; }) : Promise.resolve();
+    return job.then(function () { hello(); parts(); about(); finish(); Kit.whoLine($('me')); });
+  }
+
+  Promise.all([Kit.read('spine:' + FAM), Kit.read('function:' + FAM)]).then(function (r) {
+    spine = r[0];
+    if (!spine) throw new Error('no frame');
+    var law = r[1], m = law && Kit.text(law['1']).match(/wording standing now is the ([^.]+?) wording/);
+    wording = m ? m[1] : '';
+    $('status').textContent = '';
+    return refresh();
+  }).catch(function () {
+    $('status').textContent = '';
+    $('status').appendChild(el('p', 'calm', 'This can\u2019t be reached just now. Please try again in a little while.'));
+  });
+})();
+</script>
+</body>
+</html>
