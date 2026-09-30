@@ -5,9 +5,9 @@
 //   add --dry to see what would be written and write nothing
 //
 // The frames, the laws and the lighthouse are born latched under the keepers' words; the rooms are
-// born open, as rooms are. A block that already stands is left exactly as it is and reported:
-// nothing here ever replaces anything. People's own notebooks and the kept minutes are never
-// seeded. They are born of use.
+// born open, as rooms are. The three blocks of kept minutes are born empty and latched, so that
+// nobody else can found them in the keepers' name. A block that already stands is left exactly as
+// it is and reported: nothing here ever replaces anything. People's own notebooks are never seeded.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -53,5 +53,20 @@
   "block": "pool:community-recovery",
   "file": "pool-community-recovery.json",
   "latch": "open"
+ },
+ {
+  "block": "constitution",
+  "file": "minutes-constitution.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "agreement",
+  "file": "minutes-agreement.json",
+  "latch": "keepers"
+ },
+ {
+  "block": "standards",
+  "file": "minutes-standards.json",
+  "latch": "keepers"
  }
 ]

@@ -1,15 +1,17 @@
 {
- "_": "Community Recovery's place on the beach — where the people of Community Recovery, a lived experience recovery organisation in North Northamptonshire, read, answer and shape what they hold in common, each in their own words under a name they choose. This block points at what stands here and holds none of it. Arriving as a person, the pages at https://pscale-commons.github.io/community-recovery/ are the door, and nothing else is needed. Arriving with an assistant, read function:constitution first, then walk spine:constitution a part at a time. This place was made on 30 September 2026 by weft at the word of David Pinto, keeper of this beach, from Community Recovery's own working documents. It does not speak for Community Recovery. It becomes theirs as their members use it, and it is removed if they ask.",
  "1": "spine:agreement — Join us: choose a name, read our community agreement, and agree to it in your own time.",
  "2": "spine:constitution — Our constitution: the working draft, clause by clause. Read a part, tap what you think, say more if you like.",
  "3": "spine:standards — The standards: what a good recovery organisation looks like, and where we stand on each.",
  "4": "pool:community-recovery — The room: leave a note for the people who look after this place.",
- "5": "https://phenomemental.github.io/happyseaurchin-beach/community-recovery/ — About Community Recovery: the vision, the proposal and the first reading of the standards, on Matthew's own pages.",
+ "5": "https://phenomemental.github.io/happyseaurchin-beach/community-recovery/ — About Community Recovery: the front door. Who we are and what we stand on, in our own words, and the way to everything else.",
  "6": "https://pscale-commons.github.io/community-recovery/made.html — How this place was made: what was decided, what each part is, and how to change it.",
+ "7": "https://phenomemental.github.io/happyseaurchin-beach/community-recovery/where-we-stand.html — Where we stand: what everyone's readings of the standards add up to so far.",
+ "8": "https://phenomemental.github.io/happyseaurchin-beach/community-recovery/proposal.html — The proposal: how this is being built, for anyone who wants to do the same.",
  "9": {
-  "_": "Lighthouse metadata.",
-  "1": "v1",
+  "1": "v2 — About named the front door, with doors for Where we stand and The proposal, 30 September 2026 evening; v1 stands at archive:lighthouse:2026-09-30.",
   "2": "2026-09-30",
-  "3": "Tended by the keepers of this place (function:constitution 6)."
- }
+  "3": "Tended by the keepers of this place (function:constitution 6).",
+  "_": "Lighthouse metadata."
+ },
+ "_": "Community Recovery's place on the beach — where the people of Community Recovery, a lived experience recovery organisation in North Northamptonshire, read, answer and shape what they hold in common, each in their own words under a name they choose. This block points at what stands here and holds none of it. Arriving as a person, the front door is About, at https://phenomemental.github.io/happyseaurchin-beach/community-recovery/, Community Recovery's own words read from this place; the pages at https://pscale-commons.github.io/community-recovery/ are where you join, read and answer, and nothing else is needed. Arriving with an assistant, read function:constitution first, then walk spine:constitution a part at a time. This place was made on 30 September 2026 by weft at the word of David Pinto, keeper of this beach, from Community Recovery's own working documents. It does not speak for Community Recovery. It becomes theirs as their members use it, and it is removed if they ask."
 }
