@@ -31,6 +31,11 @@ that phone. Behind the page the name is a handle and the words are its key: the 
 named for that person. Nothing that identifies or protects a person is asked for here: legal names,
 contact details, emergency contacts and the safe-participation conversation stay on paper.
 
+A person can change or remove any answer, and can leave altogether from the Join us page, which
+removes their card and every notebook by their own words. The three words come from a list of
+about 1,100 plain ones (`words.js`; `tools/make-words.py` says what a word must be to stand there),
+and a slip of a letter when typing them back is put right.
+
 ## How it works
 
 Everything shared has one shape, five blocks at the place:

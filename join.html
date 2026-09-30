@@ -52,6 +52,8 @@
     </form>
   </section>
 
+  <p class="me" id="leave" hidden><button type="button" class="plain" id="leave-ask">Leave: remove my name and everything I wrote here</button></p>
+
   <section class="card-box" id="in" hidden>
     <h2>You&rsquo;re in</h2>
     <div id="paper"></div>
@@ -102,6 +104,7 @@
       box.appendChild(b);
     }
     $('hello').hidden = false;
+    $('leave').hidden = !m;
   }
 
   function parts() {
@@ -202,10 +205,26 @@
     });
   }
 
+  $('leave-ask').addEventListener('click', function () {
+    var p = $('leave'), m = Kit.me(); if (!m) return;
+    p.textContent = 'Remove ' + m.name + ' and everything ' + m.name + ' wrote here? It cannot be brought back. ';
+    var yes = el('button', 'plain', 'Yes, remove it'); yes.type = 'button';
+    var no = el('button', 'plain', 'No, keep it'); no.type = 'button';
+    p.appendChild(yes); p.appendChild(document.createTextNode(' \u00b7 ')); p.appendChild(no);
+    no.addEventListener('click', function () { location.reload(); });
+    yes.addEventListener('click', function () {
+      yes.disabled = true;
+      Kit.leave().then(function (ok) {
+        if (ok) { location.reload(); return; }
+        p.textContent = 'That didn\u2019t reach the beach. Please try again in a moment.';
+      });
+    });
+  });
+
   function refresh() {
     var m = Kit.me();
     var job = m ? Kit.read(FAM + ':' + m.name).then(function (b) { mine = b; }, function () { mine = null; }) : Promise.resolve();
-    return job.then(function () { hello(); parts(); about(); finish(); Kit.whoLine($('me')); });
+    return job.then(function () { hello(); parts(); about(); finish(); });
   }
 
   Promise.all([Kit.read('spine:' + FAM), Kit.read('function:' + FAM)]).then(function (r) {
@@ -214,6 +233,7 @@
     var law = r[1], m = law && Kit.text(law['1']).match(/wording standing now is the ([^.]+?) wording/);
     wording = m ? m[1] : '';
     $('status').textContent = '';
+    Kit.whoLine($('me'));
     return refresh();
   }).catch(function () {
     $('status').textContent = '';

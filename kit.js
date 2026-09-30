@@ -219,6 +219,18 @@
     }, function () { return { ok: false, why: 'beach' }; });
   }
 
+  // Leaving: a person removes their own notebooks and their card. Only their words can do it.
+  function leave() {
+    var m = me();
+    if (!m) return Promise.resolve(false);
+    return index().then(function (idx) {
+      var mine = names(idx).filter(function (n) { return n !== 'passport:' + m.name && n.slice(n.lastIndexOf(':') + 1) === m.name && !/^(sed|grain|pool):/.test(n); });
+      return mine.reduce(function (p, b) { return p.then(function () { return wipe(b, m.words); }); }, Promise.resolve())
+        .then(function () { return wipe('passport:' + m.name, m.words); })
+        .then(function (r) { if (r.ok) forgetMe(); return r.ok; });
+    }, function () { return false; });
+  }
+
   // ---- the card: a picture of the name and its words, to keep -----------------------------------
   function cardPicture(name, words) {
     var c = document.createElement('canvas'); c.width = 900; c.height = 560;
@@ -803,7 +815,7 @@
     beach: BEACH, wire: WIRE, config: CFG,
     read: read, index: index, names: names, post: post, wipe: wipe,
     text: text, digits: digits, at: at, dotted: dotted, split: split, cap: cap, el: el, when: when, today: today,
-    me: me, name: name, nameSheet: nameSheet, forgetMe: forgetMe, whoLine: whoLine, people: people, ready: ready,
+    me: me, name: name, nameSheet: nameSheet, forgetMe: forgetMe, whoLine: whoLine, people: people, ready: ready, leave: leave,
     listenButton: listenButton, speakButton: speakButton, circle: circle, family: family,
     keeperWords: keeperWords, setKeeper: setKeeper,
     // for the checks only
