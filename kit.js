@@ -304,7 +304,7 @@
         var words = threeWords();
         var form = el('form'); form.noValidate = true;
         var f = field('What shall we call you?', 'cr-name'); f[1].setAttribute('autocapitalize', 'words'); f[1].maxLength = 24;
-        var small1 = el('p', 'small', 'Any name you like. It shows beside what you write, and everyone can read it.');
+        var small1 = el('p', 'small', 'A first name or a nickname is fine. It shows beside what you write, and everyone can read it.');
         var lab = el('p', 'label', 'Your three words');
         var chips = el('div', 'words');
         function paint() { chips.textContent = ''; words.forEach(function (w) { chips.appendChild(el('span', null, w)); }); chips.appendChild(other); }
