@@ -102,3 +102,7 @@ The code is under the MIT licence. `look.css` is Matthew's stylesheet from his C
 pages, used here unchanged so these pages sit beside his. The constitution and the community
 agreement in `seed/` are Community Recovery's own working documents of September 2026. The 33
 standards are CLERO's. None of those are this repository's to license.
+
+## Changing the pages
+
+The pages name their scripts and styles with a `?v=` mark. Change it in every page when a script or a style changes, so a phone that visited before picks up the new one.
