@@ -151,7 +151,8 @@
     var s = String(typed || '');
     try { s = s.normalize('NFC'); } catch (e) {}
     s = s.replace(/\s+/g, ' ').trim().replace(/ /g, '-');
-    try { s = s.replace(/[^\p{L}\p{N}'\-]/gu, ''); } catch (e) { s = s.replace(/[^A-Za-z0-9'\-]/g, ''); }
+    // letters of any alphabet where the browser knows them; built at run time so an older browser still loads the page
+    try { s = s.replace(new RegExp("[^\\p{L}\\p{N}'\\-]", 'gu'), ''); } catch (e) { s = s.replace(/[^A-Za-z0-9'\-]/g, ''); }
     return s.replace(/^[-']+|[-']+$/g, '').slice(0, 24);
   }
   function people(idx) {
