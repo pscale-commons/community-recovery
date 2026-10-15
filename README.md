@@ -1,9 +1,15 @@
 # Community Recovery on the beach
 
+> **Moved, 15 October 2026.** The pages now live on Matthew's site, in Community Recovery's own look:
+> https://phenomemental.github.io/happyseaurchin-beach/community-recovery/. Each page here forwards to
+> its counterpart there. Both read and write the same place on the beach, so nobody's answers moved.
+> Matthew's copy is the one kept up to date. The kit as it stood before the move is commit 028b8e1.
+
 A few plain pages in front of a place on the [Pscale beach](https://beach.happyseaurchin.com), made for
 Community Recovery, a lived experience recovery organisation in North Northamptonshire, to use.
 
-- **The pages:** https://pscale-commons.github.io/community-recovery/
+- **The pages:** https://phenomemental.github.io/happyseaurchin-beach/community-recovery/ (until
+  15 October 2026, https://pscale-commons.github.io/community-recovery/)
 - **The place:** `https://beach.happyseaurchin.com/w/community-recovery`
 - **Why it is shaped this way:** the proposal and its decisions,
   [bsp-mcp-server#458](https://github.com/pscale-commons/bsp-mcp-server/pull/458)
